@@ -20,6 +20,7 @@ export class MainPage{
   ) {}
 
   ngOnInit() {
+    this.audioService.initUserInteraction();
     this.audioService.unlockAndPlay("ambiente");
   }
 

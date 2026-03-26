@@ -13,6 +13,26 @@ export class AudioService {
     this.audio.volume = 0.3;
   }
 
+  private started = false;
+
+  initUserInteraction() {
+    if (this.started) return;
+
+    const startAudio = () => {
+      this.audio.loop = true;
+      this.audio.volume = 0.5;
+
+      this.audio.play()
+        .then(() => {
+          this.started = true;
+          window.removeEventListener('click', startAudio);
+        })
+        .catch(err => console.error(err));
+    };
+
+    window.addEventListener('click', startAudio);
+  }
+
   unlockAndPlay(audio: string) {
     if (audio === 'ambiente') {
       this.audio
