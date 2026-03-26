@@ -1,0 +1,49 @@
+<div class="play-page">
+  <div class="film-grain" aria-hidden="true"></div>
+  <div class="bg-spots" aria-hidden="true">
+    <div class="bg-spot bg-spot--left"></div>
+    <div class="bg-spot bg-spot--right"></div>
+  </div>
+
+  <div class="main-content">
+
+    <header class="play-header">
+      <div class="header-eyebrow">
+        <span class="hole-strip">
+          <span class="hole"></span><span class="hole"></span><span class="hole"></span>
+        </span>
+        <span class="eyebrow-text">★ Sala de Juego ★</span>
+        <span class="hole-strip">
+          <span class="hole"></span><span class="hole"></span><span class="hole"></span>
+        </span>
+      </div>
+
+      <div class="header-main">
+        <div>
+          <h1 class="page-title">Modo Juego</h1>
+          <p class="page-sub">Edita los puntos de cada equipo en tiempo real</p>
+        </div>
+        <div class="header-divider-v"></div>
+        <div class="play-actions">
+          <button class="btn btn-ghost" type="button" (click)="back()">
+            <span class="btn-icon">←</span> Volver
+          </button>
+          <button class="btn btn-cta" type="button" (click)="goToPresent()">
+            <span class="btn-icon">▶</span> Ver Puntuaciones
+          </button>
+        </div>
+      </div>
+
+      <div class="header-rule">
+        <div class="rule-line"></div>
+        <span class="rule-diamond">✦</span>
+        <div class="rule-line"></div>
+      </div>
+    </header>
+
+    <app-teams-list [teams]="teams" (changed)="onTeamsChanged()"></app-teams-list>
+
+  </div>
+
+  <app-discard-confirm-modal [visible]="modalVisible"></app-discard-confirm-modal>
+</div>

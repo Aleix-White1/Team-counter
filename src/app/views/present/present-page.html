@@ -1,0 +1,94 @@
+<div class="present-page">
+
+  @if (!ceremonyStarted()) {
+    <div class="start-screen">
+      <div class="start-logo">★ PUNTUACIONES ★</div>
+      <div class="start-hint">Pulsa para comenzar la ceremonia</div>
+      <button class="btn-start" (click)="beginCeremony()">▶ &nbsp; Comenzar</button>
+    </div>
+  }
+
+  @if (showCountdown()) {
+    <div class="countdown-overlay" [class.flicker]="countFlicker()">
+      {{ countdownValue() }}
+    </div>
+  }
+
+  @if (curtainsVisible()) {
+    <div class="curtain-left"  [class.open]="curtainsOpen()"></div>
+    <div class="curtain-right" [class.open]="curtainsOpen()"></div>
+  }
+
+  <div class="drum-overlay" [class.active]="showDrum()">
+    <div class="drum-text">Redoble de tambor...</div>
+    <div class="drum-dots">
+      <div class="drum-dot"></div>
+      <div class="drum-dot"></div>
+      <div class="drum-dot"></div>
+    </div>
+  </div>
+
+  <div class="spotlights" [class.visible]="curtainsOpen()">
+    <div class="spot spot-1"></div>
+    <div class="spot spot-2"></div>
+    <div class="spot spot-3"></div>
+  </div>
+
+  <div class="particles">
+    @for (p of particles(); track $index) {
+      <div class="particle" [style]="p.style"></div>
+    }
+  </div>
+
+  <div class="content">
+    <header class="present-header" [class.visible]="headerVisible()">
+      <div class="film-roll">
+        @for (h of filmHoles; track $index) {
+          <div class="film-hole"></div>
+        }
+      </div>
+      <h1>Puntuaciones Finales</h1>
+      <div class="header-subtitle">★ Ceremonia de Premiación ★</div>
+      <div class="gold-divider"></div>
+      <button class="btn-back" type="button" (click)="backToPlay()">← Volver a jugar</button>
+    </header>
+
+    @if (teams().length === 0) {
+      <div class="no-teams"><p>No hay equipos guardados.</p></div>
+    }
+
+    @if (teams().length > 0) {
+      <div class="present-list">
+        @for (team of sortedTeams(); track team.name; let i = $index) {
+          <div
+            class="team-row"
+            [class.reveal]="revealedIndexes().has(i)"
+            [attr.data-rank]="i + 1"
+          >
+            @if (i === 0) {
+              <div class="crown">👑</div>
+            }
+            <div class="row-inner">
+              <div class="rank-medal" [ngClass]="medalClass(i)">{{ i + 1 }}</div>
+              <div class="team-info">
+                <div class="team-name">{{ team.name }}</div>
+                <div class="team-participants">{{ team.participants.join(', ') }}</div>
+              </div>
+              <div class="pts-block">
+                <div class="team-points">{{ team.points ?? 0 }}</div>
+                <div class="pts-label">pts</div>
+              </div>
+            </div>
+            <div class="pts-bar-wrap">
+              <div
+                class="pts-bar"
+                [style.width]="revealedIndexes().has(i) ? getBarPct(team) + '%' : '0%'"
+              ></div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+</div>

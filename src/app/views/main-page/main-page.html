@@ -1,0 +1,124 @@
+<div class="main-page">
+  <!-- Grano de película de fondo -->
+  <div class="film-grain" aria-hidden="true"></div>
+
+  <!-- Focos decorativos -->
+  <div class="bg-spots" aria-hidden="true">
+    <div class="bg-spot bg-spot--left"></div>
+    <div class="bg-spot bg-spot--right"></div>
+  </div>
+
+  <div class="main-content">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="header-badge">
+        <span class="badge-holes">
+          @for (h of holes; track $index) {
+            <span class="hole"></span>
+          }
+        </span>
+        <span class="badge-text">★ Sala de Producción ★</span>
+        <span class="badge-holes">
+          @for (h of holes; track $index) {
+            <span class="hole"></span>
+          }
+        </span>
+      </div>
+      <h1 class="page-title">Crear tu Partida</h1>
+      <p class="page-sub">Forma tus equipos, añade participantes y comienza a jugar</p>
+      <div class="header-divider"></div>
+    </header>
+
+    <!-- Área de formularios -->
+    <section class="forms-section">
+      <div class="forms-container">
+        @for (formId of teamForms(); track formId; let i = $index) {
+          <div class="form-wrapper" [style.animation-delay]="i * 0.07 + 's'">
+            <div class="form-tag">
+              <span class="form-tag__number">{{ i + 1 }}</span>
+              <span class="form-tag__label">Equipo</span>
+            </div>
+            <app-form-teams (submitTeam)="saveTeam(i, $event)" [finished]="finished()" />
+            @if (teamForms().length > 1) {
+              <button
+                class="btn-remove"
+                type="button"
+                (click)="removeTeamForm(i)"
+                title="Eliminar equipo"
+                aria-label="Eliminar equipo {{ i + 1 }}"
+              >
+                ✕
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Botón añadir equipo -->
+      <button class="btn-add-team" type="button" (click)="addTeamForm()">
+        <span class="btn-add-team__icon">+</span>
+        <span>Añadir equipo</span>
+      </button>
+    </section>
+
+    <!-- Acciones principales -->
+    @if (teamForms().length > 0) {
+      <div class="form-actions">
+        <button
+          class="btn btn-gold"
+          type="button"
+          (click)="submitAllTeams()"
+          [disabled]="teamForms().length === 0"
+        >
+          <span class="btn-icon">✦</span> Guardar Todos
+        </button>
+        <button
+          class="btn btn-ghost"
+          type="button"
+          (click)="clearAllTeams()"
+          [disabled]="teamForms().length === 0"
+        >
+          Limpiar Todo
+        </button>
+        @if (finished()) {
+          <button class="btn btn-cta" type="button" (click)="playTeams()">
+            <span class="btn-icon">▶</span> Comenzar Juego
+          </button>
+        }
+      </div>
+    }
+
+    <!-- Resumen de equipos guardados -->
+    @if (finished() && teamsData().length > 0) {
+      <div class="saved-data">
+        <div class="saved-data__header">
+          <h2>Equipos Listos</h2>
+          <span class="saved-badge">{{ teamsData().length }} equipos</span>
+        </div>
+        <div class="teams-summary">
+          @for (team of teamsData(); track team.name; let idx = $index) {
+            <div class="team-summary" [attr.data-rank]="idx + 1">
+              <div class="team-summary__rank">{{ idx + 1 }}</div>
+              <div class="team-summary__info">
+                <strong>{{ team.name }}</strong>
+                <span class="participants-count">
+                  {{ team.participants.length }} participante{{
+                    team.participants.length !== 1 ? 's' : ''
+                  }}
+                </span>
+              </div>
+              <div class="team-summary__dots">
+                @for (p of team.participants.slice(0, 4); track $index) {
+                  <span class="dot" [title]="p">{{ p.charAt(0).toUpperCase() }}</span>
+                }
+                @if (team.participants.length > 4) {
+                  <span class="dot dot--more">+{{ team.participants.length - 4 }}</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

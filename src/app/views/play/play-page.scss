@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;900&family=Lato:wght@300;400;700&display=swap');
+
+:host {
+  --gold:        #d4a017;
+  --gold-bright: #f5c842;
+  --gold-dim:    #7a5c0a;
+  --gold-muted:  rgba(212,160,23,0.12);
+  --ink:         #0d0d0d;
+  --ink-card:    #111111;
+  --cream:       #f0e6c8;
+  --cream-muted: rgba(240,230,200,0.45);
+  --red-accent:  #8b1a1a;
+  display: block;
+}
+
+// ── Base ───────────────────────────────────────────────────
+.play-page {
+  position: relative;
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Lato', sans-serif;
+  overflow-x: hidden;
+  padding: 0 0 6rem;
+}
+
+// ── Grano ──────────────────────────────────────────────────
+.film-grain {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+// ── Focos ──────────────────────────────────────────────────
+.bg-spots { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.bg-spot {
+  position: absolute; width: 600px; height: 700px;
+  border-radius: 0 0 50% 50%; top: -200px;
+  animation: swayBg 12s ease-in-out infinite;
+  &--left  { left: -100px;  background: radial-gradient(ellipse at 50% 0%, rgba(212,160,23,0.06) 0%, transparent 65%); }
+  &--right { right: -100px; background: radial-gradient(ellipse at 50% 0%, rgba(139,26,26,0.05) 0%, transparent 65%); animation-delay: -6s; animation-direction: reverse; }
+}
+@keyframes swayBg {
+  0%,100% { transform: rotate(-4deg); }
+  50%     { transform: rotate(4deg); }
+}
+
+// ── Layout ─────────────────────────────────────────────────
+.main-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; gap: 2rem;
+  width: 100%; max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 0;
+}
+
+// ── Header ─────────────────────────────────────────────────
+.play-header {
+  display: flex; flex-direction: column; gap: 1.1rem;
+  animation: fadeDown 0.7s cubic-bezier(.2,.9,.3,1) both;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.header-eyebrow {
+  display: flex; align-items: center; gap: 12px;
+}
+.hole-strip { display: flex; gap: 5px; }
+.hole {
+  display: block; width: 14px; height: 10px;
+  background: rgba(245,200,66,.08);
+  border: 1px solid rgba(245,200,66,.25);
+  border-radius: 2px;
+}
+.eyebrow-text {
+  font-family: 'Cinzel', serif;
+  font-size: .68rem; letter-spacing: .3em;
+  color: var(--gold-dim); text-transform: uppercase; white-space: nowrap;
+}
+
+.header-main {
+  display: flex; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap;
+}
+
+.page-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  font-weight: 700;
+  color: var(--gold-bright);
+  letter-spacing: .06em; margin: 0 0 .35rem;
+  text-shadow: 0 0 40px rgba(245,200,66,.2);
+}
+.page-sub {
+  font-size: .9rem; font-weight: 300;
+  color: var(--cream-muted); letter-spacing: .04em; margin: 0;
+}
+
+.header-divider-v {
+  width: 1px; align-self: stretch;
+  background: linear-gradient(180deg, transparent, rgba(212,160,23,.3), transparent);
+  flex-shrink: 0;
+}
+
+.play-actions {
+  display: flex; gap: .8rem; align-items: center;
+  flex-wrap: wrap; padding-top: .15rem;
+}
+
+.header-rule {
+  display: flex; align-items: center; gap: 10px;
+}
+.rule-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,160,23,.3));
+}
+.rule-line:last-child {
+  background: linear-gradient(90deg, rgba(212,160,23,.3), transparent);
+}
+.rule-diamond {
+  font-size: .65rem; color: var(--gold);
+}
+
+// ── Botones ────────────────────────────────────────────────
+.btn {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .6rem 1.25rem;
+  border-radius: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+  cursor: pointer; border: none;
+  transition: all .25s; white-space: nowrap;
+  &:disabled { opacity: .35; cursor: not-allowed; }
+}
+.btn-icon { font-size: .8rem; }
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(240,230,200,.15);
+  color: var(--cream-muted);
+  &:hover { border-color: rgba(240,230,200,.38); color: var(--cream); }
+}
+
+.btn-cta {
+  background: linear-gradient(135deg, #6b0f0f, var(--red-accent));
+  color: var(--cream); font-weight: 700;
+  box-shadow: 0 4px 20px rgba(139,26,26,.35);
+  animation: ctaPulse 2.5s ease-in-out infinite;
+  &:hover { background: linear-gradient(135deg, var(--red-accent), #b52020); box-shadow: 0 6px 28px rgba(139,26,26,.55); transform: translateY(-1px); animation: none; }
+}
+@keyframes ctaPulse {
+  0%,100% { box-shadow: 0 4px 20px rgba(139,26,26,.35); }
+  50%      { box-shadow: 0 4px 32px rgba(139,26,26,.6); }
+}

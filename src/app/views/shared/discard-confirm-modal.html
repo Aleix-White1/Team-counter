@@ -1,0 +1,10 @@
+<div class="modal-backdrop" *ngIf="visible">
+  <div class="modal">
+    <h3>Descartar partida</h3>
+    <p>¿Quieres descartar la partida actual y volver atrás? Se perderán los datos no persistidos.</p>
+    <div class="modal-actions">
+      <button type="button" (click)="onYes()">Sí, descartar</button>
+      <button type="button" (click)="onNo()">No</button>
+    </div>
+  </div>
+</div>

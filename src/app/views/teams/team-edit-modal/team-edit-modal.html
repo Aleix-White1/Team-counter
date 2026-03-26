@@ -1,0 +1,102 @@
+@if (visible) {
+  <div class="modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="modal" role="dialog" [attr.aria-label]="'Editar puntos de ' + team?.name">
+
+      <!-- Header -->
+      <div class="modal-header">
+        <div class="modal-eyebrow">
+          <span class="eyebrow-hole"></span>
+          <span class="eyebrow-hole"></span>
+          <span class="eyebrow-text">Editar puntos</span>
+          <span class="eyebrow-hole"></span>
+          <span class="eyebrow-hole"></span>
+        </div>
+        <h3 class="modal-title">{{ team?.name }}</h3>
+        <div class="modal-participants">
+          @for (p of (team?.participants ?? []); track $index; let i = $index) {
+            @if (i < 6) {
+              <span class="p-chip" [title]="p">{{ p.charAt(0).toUpperCase() }}</span>
+            }
+          }
+          @if ((team?.participants?.length ?? 0) > 6) {
+            <span class="p-chip p-chip--more">+{{ (team?.participants?.length ?? 0) - 6 }}</span>
+          }
+        </div>
+        <button class="btn-close" type="button" (click)="onClose()" aria-label="Cerrar">✕</button>
+      </div>
+
+      <!-- Marcador actual -->
+      <div class="score-display">
+        <div class="score-block score-block--current">
+          <span class="score-label">Puntos actuales</span>
+          <span class="score-value">{{ team?.points ?? 0 }}</span>
+        </div>
+        <div class="score-arrow" [class.score-arrow--pos]="delta > 0" [class.score-arrow--neg]="delta < 0">
+          {{ delta > 0 ? '+' : '' }}{{ delta !== 0 ? delta : '±' }}
+        </div>
+        <div class="score-block score-block--result" [class.result--pos]="resultPoints > (team?.points ?? 0)" [class.result--neg]="resultPoints < (team?.points ?? 0)">
+          <span class="score-label">Resultado</span>
+          <span class="score-value">{{ resultPoints }}</span>
+        </div>
+      </div>
+
+      <!-- Botones rápidos -->
+      <div class="quick-section">
+        <span class="quick-label">Acceso rápido</span>
+        <div class="quick-buttons">
+          @for (preset of presets; track preset.value) {
+            <button
+              type="button"
+              class="quick-btn"
+              [class.quick-btn--pos]="preset.value > 0"
+              [class.quick-btn--neg]="preset.value < 0"
+              [class.quick-btn--active]="delta === preset.value"
+              (click)="applyPreset(preset.value)">
+              {{ preset.label }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Input manual -->
+      <div class="input-section">
+        <span class="quick-label">Valor personalizado</span>
+        <div class="input-row">
+          <button type="button" class="stepper-btn stepper-btn--minus" (click)="step(-1)" aria-label="Restar 1">−</button>
+          <div class="input-wrapper" [class.input-pos]="delta > 0" [class.input-neg]="delta < 0">
+            <span class="input-prefix">{{ delta >= 0 ? '+' : '' }}</span>
+            <input
+              id="deltaPoints"
+              type="number"
+              [(ngModel)]="delta"
+              (ngModelChange)="onDeltaChange($event)"
+              class="modal-input"
+              placeholder="0"
+              autocomplete="off">
+            <div class="input-bar"></div>
+          </div>
+          <button type="button" class="stepper-btn stepper-btn--plus" (click)="step(1)" aria-label="Sumar 1">+</button>
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="modal-actions">
+        <button class="btn btn-ghost" type="button" (click)="onClose()">
+          Cancelar
+        </button>
+        <button
+          class="btn btn-apply"
+          type="button"
+          (click)="onApply()"
+          [disabled]="delta === 0"
+          [class.btn-apply--pos]="delta > 0"
+          [class.btn-apply--neg]="delta < 0">
+          <span class="btn-shimmer"></span>
+          <span class="apply-icon">{{ delta > 0 ? '↑' : delta < 0 ? '↓' : '✦' }}</span>
+          Aplicar {{ delta > 0 ? '+' + delta : delta < 0 ? delta : '' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

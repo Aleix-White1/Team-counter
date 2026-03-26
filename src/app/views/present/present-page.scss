@@ -1,0 +1,373 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;900&display=swap');
+
+:host {
+  display: block;
+  --gold:        #d4a017;
+  --gold-bright: #f5c842;
+  --gold-dim:    #7a5c0a;
+  --cream:       #f0e6c8;
+  --ink:         #090909;
+}
+
+// ── Página base ────────────────────────────────────────────
+.present-page {
+  position: relative;
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Cinzel', serif;
+  // SIN overflow:hidden — rompe position:fixed
+}
+
+// ── Pantalla inicio ────────────────────────────────────────
+.start-screen {
+  position: fixed; inset: 0; z-index: 500;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 1.5rem;
+  background: var(--ink);
+}
+
+.start-logo {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.8rem, 7vw, 4rem);
+  font-weight: 900;
+  color: var(--gold-bright);
+  text-shadow: 0 0 60px rgba(245,200,66,.5);
+  text-align: center;
+  letter-spacing: .08em;
+}
+
+.start-hint {
+  font-size: .78rem;
+  letter-spacing: .3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  animation: blink 1.8s ease-in-out infinite;
+}
+
+.btn-start {
+  background: transparent;
+  border: 2px solid var(--gold);
+  border-radius: 4px;
+  color: var(--gold);
+  font-family: 'Cinzel', serif;
+  font-size: .9rem;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  padding: .8rem 2.2rem;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(212,160,23,.2);
+  transition: all .3s;
+
+  &:hover {
+    background: rgba(212,160,23,.12);
+    box-shadow: 0 0 40px rgba(212,160,23,.5);
+  }
+}
+
+@keyframes blink { 0%,100%{opacity:.25} 50%{opacity:1} }
+
+// ── Cuenta atrás ───────────────────────────────────────────
+.countdown-overlay {
+  position: fixed; inset: 0; z-index: 400;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--ink);
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(5rem, 25vw, 10rem);
+  font-weight: 900;
+  color: var(--gold-bright);
+  text-shadow: 0 0 40px rgba(245,200,66,.7), 0 0 100px rgba(245,200,66,.3);
+
+  &.flicker { animation: flicker .08s linear 3; }
+}
+
+@keyframes flicker { 0%,100%{opacity:1} 50%{opacity:.15} }
+
+// ── Cortinas ───────────────────────────────────────────────
+.curtain-left,
+.curtain-right {
+  position: fixed; top: 0; bottom: 0; width: 52%;
+  z-index: 300;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.2) 0, transparent 5px, rgba(0,0,0,.2) 10px),
+    linear-gradient(180deg, #2e0404 0%, #5a0a0a 40%, #2e0404 100%);
+  transition: transform 1.6s cubic-bezier(.76,0,.24,1);
+}
+
+.curtain-left  { left: 0;  transform: translateX(0); &.open { transform: translateX(-100%); } }
+.curtain-right { right: 0; transform: translateX(0); &.open { transform: translateX(100%); } }
+
+// ── Redoble ────────────────────────────────────────────────
+.drum-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: rgba(9,9,9,.92);
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s;
+
+  &.active { opacity: 1; pointer-events: auto; }
+}
+
+.drum-text {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(.9rem, 4vw, 2rem);
+  color: var(--gold-bright);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  text-shadow: 0 0 30px rgba(245,200,66,.8);
+  animation: drumPulse .45s ease-in-out infinite;
+}
+
+.drum-dots { margin-top: 1.5rem; display: flex; gap: 10px; }
+
+.drum-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--gold);
+  animation: dotBounce .45s ease-in-out infinite;
+  &:nth-child(2) { animation-delay: .15s; }
+  &:nth-child(3) { animation-delay: .30s; }
+}
+
+@keyframes drumPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06);opacity:.7} }
+@keyframes dotBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+
+// ── Focos ──────────────────────────────────────────────────
+.spotlights {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 5;
+  overflow: hidden;
+}
+
+.spot {
+  position: absolute;
+  top: -40%; width: 400px; height: 680px;
+  border-radius: 0 0 50% 50%;
+  opacity: 0;
+  transform-origin: top center;
+  transition: opacity 1.4s ease;
+  animation: swaySpot 9s ease-in-out infinite;
+
+  .spotlights.visible & { opacity: 1; }
+
+  &-1 { left: 4%;  background: radial-gradient(ellipse at 50% 0%, rgba(245,200,66,.16) 0%, transparent 70%); }
+  &-2 { left: 36%; background: radial-gradient(ellipse at 50% 0%, rgba(255,240,180,.10) 0%, transparent 70%); animation-delay: -3s; }
+  &-3 { right: 4%; background: radial-gradient(ellipse at 50% 0%, rgba(245,200,66,.16) 0%, transparent 70%); animation-delay: -6s; }
+}
+
+@keyframes swaySpot { 0%,100%{transform:rotate(-7deg)} 50%{transform:rotate(7deg)} }
+
+// ── Partículas ─────────────────────────────────────────────
+.particles { position: fixed; inset: 0; pointer-events: none; z-index: 6; }
+
+.particle {
+  position: absolute;
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--gold-bright);
+  opacity: 0;
+  animation: particleFall linear infinite;
+}
+
+@keyframes particleFall {
+  0%   { opacity: 0;  transform: translateY(-20px) scale(0); }
+  20%  { opacity: .7; }
+  80%  { opacity: .3; }
+  100% { opacity: 0;  transform: translateY(90px) scale(.4); }
+}
+
+// ── Contenido ──────────────────────────────────────────────
+.content {
+  position: relative; z-index: 10;
+  width: 100%; max-width: 680px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+// ── Header ─────────────────────────────────────────────────
+.present-header {
+  text-align: center;
+  padding: 3rem 1rem 1.5rem;
+  opacity: 0;
+  transform: translateY(-22px);
+  transition: opacity .9s ease, transform .9s ease;
+
+  &.visible { opacity: 1; transform: translateY(0); }
+}
+
+.film-roll { display: flex; justify-content: center; gap: 6px; margin-bottom: 1.2rem; }
+
+.film-hole {
+  width: 18px; height: 13px;
+  background: rgba(245,200,66,.1);
+  border: 1.5px solid rgba(245,200,66,.32);
+  border-radius: 3px;
+}
+
+.present-header h1 {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.3rem, 5vw, 2.5rem);
+  font-weight: 900;
+  color: var(--gold-bright);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-shadow: 0 0 30px rgba(245,200,66,.45);
+  margin: 0;
+}
+
+.header-subtitle {
+  margin-top: .4rem;
+  font-size: .7rem; letter-spacing: .35em;
+  color: var(--gold-dim); text-transform: uppercase;
+}
+
+.gold-divider {
+  margin: 1.1rem auto; width: 240px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  position: relative;
+
+  &::before {
+    content: '✦';
+    position: absolute; left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    font-size: .75rem; color: var(--gold);
+    background: var(--ink); padding: 0 6px;
+  }
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid var(--gold-dim);
+  border-radius: 4px;
+  color: var(--gold-dim);
+  font-family: 'Cinzel', serif;
+  font-size: .7rem; letter-spacing: .2em;
+  text-transform: uppercase;
+  padding: .5rem 1.2rem;
+  cursor: pointer;
+  transition: all .3s;
+  margin-top: .3rem;
+
+  &:hover { border-color: var(--gold); color: var(--gold); }
+}
+
+// ── Lista ──────────────────────────────────────────────────
+.present-list {
+  display: flex; flex-direction: column;
+  gap: .85rem; padding-bottom: 4rem; margin-top: .8rem;
+}
+
+// ── Fila equipo ────────────────────────────────────────────
+.team-row {
+  position: relative;
+  opacity: 0;
+  transform: translateY(28px) scale(.97);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.2,.9,.3,1);
+
+  &.reveal { opacity: 1; transform: translateY(0) scale(1); }
+
+  &[data-rank="1"] {
+    .row-inner {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, rgba(212,160,23,.17), rgba(245,200,66,.04));
+      box-shadow: 0 0 28px rgba(212,160,23,.14), inset 0 0 18px rgba(212,160,23,.05);
+    }
+    .team-name   { color: var(--gold-bright); text-shadow: 0 0 12px rgba(245,200,66,.4); }
+    .team-points { font-size: 1.7rem; color: var(--gold-bright); text-shadow: 0 0 16px rgba(245,200,66,.55); }
+    .pts-bar     { background: linear-gradient(90deg, var(--gold), #fff7a0); }
+  }
+  &[data-rank="2"] {
+    .row-inner { border-color: rgba(192,192,192,.45); }
+    .pts-bar   { background: linear-gradient(90deg, #777, #ddd); }
+  }
+  &[data-rank="3"] {
+    .row-inner { border-color: rgba(176,120,60,.45); }
+    .pts-bar   { background: linear-gradient(90deg, #7a4a1a, #cd7f32); }
+  }
+}
+
+.crown {
+  position: absolute; top: -13px; right: 14px;
+  font-size: 1.25rem;
+  animation: floatCrown 2.6s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(245,200,66,.8));
+}
+
+@keyframes floatCrown {
+  0%,100% { transform: translateY(0) rotate(-5deg); }
+  50%     { transform: translateY(-5px) rotate(5deg); }
+}
+
+.row-inner {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; gap: 12px;
+  background: linear-gradient(135deg, rgba(212,160,23,.055), rgba(255,255,255,.018));
+  border: 1px solid rgba(212,160,23,.2);
+  border-radius: 6px;
+  padding: 1rem 1.1rem;
+
+  &::before {
+    content: '';
+    position: absolute; top: -80%; left: -50%;
+    width: 80%; height: 220%;
+    background: linear-gradient(105deg, transparent 40%, rgba(245,200,66,.07) 50%, transparent 60%);
+    transform: skewX(-15deg);
+    transition: left .65s ease;
+    pointer-events: none;
+  }
+  &:hover::before { left: 130%; }
+}
+
+.rank-medal {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  font-family: 'Cinzel Decorative', serif; font-weight: 900; font-size: .82rem;
+  border: 1.5px solid currentColor;
+
+  &.gold   { color: var(--gold-bright); background: rgba(245,200,66,.11); text-shadow: 0 0 8px rgba(245,200,66,.7); }
+  &.silver { color: #c0c0c0; background: rgba(192,192,192,.08); }
+  &.bronze { color: #cd7f32; background: rgba(205,127,50,.08); }
+  &.other  { color: rgba(240,230,200,.35); border-color: rgba(240,230,200,.18); background: transparent; }
+}
+
+.team-info { flex: 1; min-width: 0; }
+
+.team-name {
+  font-weight: 600; font-size: .98rem;
+  color: var(--cream);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.team-participants {
+  font-size: .67rem; letter-spacing: .1em;
+  color: rgba(240,230,200,.3);
+  text-transform: uppercase; margin-top: .22rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.pts-block { text-align: right; flex-shrink: 0; }
+
+.team-points {
+  font-family: 'Cinzel Decorative', serif;
+  font-weight: 900; font-size: 1.45rem;
+  color: var(--gold); letter-spacing: .04em;
+}
+
+.pts-label { font-size: .56rem; letter-spacing: .25em; color: var(--gold-dim); text-align: right; }
+
+.pts-bar-wrap {
+  height: 3px; background: rgba(255,255,255,.05);
+  border-radius: 2px; overflow: hidden; margin-top: .45rem;
+}
+
+.pts-bar {
+  height: 100%; border-radius: 2px; width: 0;
+  transition: width .85s cubic-bezier(.4,0,.2,1) .15s;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold-bright));
+}
+
+.no-teams {
+  text-align: center; padding: 2rem;
+  color: rgba(240,230,200,.3);
+  font-size: .85rem; letter-spacing: .1em;
+}

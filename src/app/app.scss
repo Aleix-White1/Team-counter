@@ -1,0 +1,58 @@
+:root{
+	--bg: #fbf7ef;
+	--surface: #ffffff;
+	--text: #0b1220;
+	--muted: #6b6b6b;
+	--accent: #d99a00; /* gold */
+	--accent-2: #8b1a1a; /* dark red */
+	--glass: rgba(255,255,255,0.8);
+	--shadow: rgba(11,16,32,0.06);
+}
+
+html,body{ height:100%; }
+body{
+	margin:0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+	background: linear-gradient(180deg, var(--bg) 0%, #f6efe0 100%);
+	color: var(--text);
+	-webkit-font-smoothing:antialiased;
+}
+
+/* Buttons */
+.btn{
+  font-weight:700;
+  border-radius:10px;
+  border:none;
+  cursor:pointer;
+  padding:0.7rem 1.2rem;
+  transition: all 0.2s ease;
+}
+.btn-primary{
+  background: linear-gradient(90deg, var(--accent), #ffd27a);
+  color: var(--text);
+  box-shadow: 0 6px 16px rgba(217,154,0,0.15);
+}
+.btn-primary:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(217,154,0,0.25);
+}
+.btn-ghost{
+  background:transparent;
+  color:var(--accent);
+  border:1.5px solid rgba(11,16,32,0.08);
+}
+.btn-ghost:hover{
+  background: rgba(217,154,0,0.05);
+  border-color:rgba(11,16,32,0.15);
+}
+
+/* Inputs */
+input, textarea, select{ font-family:inherit }
+input, textarea{ background: var(--surface); border:1px solid rgba(11,16,32,0.06); padding:0.6rem; border-radius:8px; color:var(--text) }
+
+/* Cards */
+.card{ background: var(--surface); border-radius:12px; box-shadow: 0 8px 24px var(--shadow); padding:1rem }
+
+/* Utility */
+.container{ max-width:980px; margin:0 auto; padding:1rem }
+

@@ -1,0 +1,420 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;900&family=Lato:wght@300;400;700&display=swap');
+
+:host {
+  --gold:         #d4a017;
+  --gold-bright:  #f5c842;
+  --gold-dim:     #7a5c0a;
+  --gold-muted:   rgba(212, 160, 23, 0.15);
+  --ink:          #0d0d0d;
+  --ink-soft:     #161616;
+  --ink-card:     #111111;
+  --cream:        #f0e6c8;
+  --cream-muted:  rgba(240, 230, 200, 0.45);
+  --cream-faint:  rgba(240, 230, 200, 0.12);
+  --red-accent:   #8b1a1a;
+  --shadow-gold:  0 8px 32px rgba(212, 160, 23, 0.12);
+  display: block;
+}
+
+// ── Base ───────────────────────────────────────────────────
+.main-page {
+  position: relative;
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Lato', sans-serif;
+  overflow-x: hidden;
+  padding: 0 0 6rem;
+}
+
+// ── Grano de película ──────────────────────────────────────
+.film-grain {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+// ── Focos de fondo ─────────────────────────────────────────
+.bg-spots { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+
+.bg-spot {
+  position: absolute;
+  width: 600px; height: 700px;
+  border-radius: 0 0 50% 50%;
+  top: -200px;
+  animation: swayBg 12s ease-in-out infinite;
+
+  &--left {
+    left: -100px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(212,160,23,0.06) 0%, transparent 65%);
+  }
+  &--right {
+    right: -100px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(139,26,26,0.05) 0%, transparent 65%);
+    animation-delay: -6s;
+    animation-direction: reverse;
+  }
+}
+
+@keyframes swayBg {
+  0%,100% { transform: rotate(-4deg); }
+  50%     { transform: rotate(4deg); }
+}
+
+// ── Contenido ──────────────────────────────────────────────
+.main-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  gap: 2.5rem;
+  width: 100%; max-width: 860px;
+  margin: 0 auto;
+  padding: 3rem 1.25rem 0;
+}
+
+// ── Header ─────────────────────────────────────────────────
+.page-header {
+  text-align: center;
+  animation: fadeDown 0.7s cubic-bezier(.2,.9,.3,1) both;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.header-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-bottom: 1.2rem;
+}
+
+.badge-holes { display: flex; gap: 5px; }
+
+.hole {
+  display: block;
+  width: 14px; height: 10px;
+  background: rgba(245,200,66,.08);
+  border: 1px solid rgba(245,200,66,.25);
+  border-radius: 2px;
+}
+
+.badge-text {
+  font-family: 'Cinzel', serif;
+  font-size: .68rem; letter-spacing: .3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.page-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(1.6rem, 5vw, 2.8rem);
+  font-weight: 700;
+  color: var(--gold-bright);
+  letter-spacing: .06em;
+  margin: 0 0 .6rem;
+  text-shadow: 0 0 40px rgba(245,200,66,.25);
+}
+
+.page-sub {
+  font-size: .95rem; font-weight: 300;
+  color: var(--cream-muted);
+  letter-spacing: .04em;
+  margin: 0;
+}
+
+.header-divider {
+  width: 200px; height: 1px; margin: 1.4rem auto 0;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  position: relative;
+
+  &::before {
+    content: '✦';
+    position: absolute; left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    font-size: .7rem; color: var(--gold);
+    background: var(--ink); padding: 0 6px;
+  }
+}
+
+// ── Sección formularios ────────────────────────────────────
+.forms-section {
+  display: flex; flex-direction: column; gap: 1.2rem;
+}
+
+.forms-container {
+  display: flex; flex-direction: column; gap: 1rem;
+}
+
+// ── Wrapper de cada formulario ─────────────────────────────
+.form-wrapper {
+  position: relative;
+  display: flex; flex-direction: column; gap: .7rem;
+  background: var(--ink-card);
+  border: 1px solid rgba(212,160,23,.14);
+  border-radius: 10px;
+  padding: 1.2rem 1.2rem 1.2rem 1rem;
+  animation: slideIn .4s cubic-bezier(.2,.9,.3,1) both;
+  transition: border-color .3s;
+
+  &:hover { border-color: rgba(212,160,23,.28); }
+  &:focus-within { border-color: rgba(212,160,23,.4); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.form-tag {
+  display: inline-flex; align-items: center; gap: .5rem;
+}
+
+.form-tag__number {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: rgba(212,160,23,.12);
+  border: 1px solid rgba(212,160,23,.35);
+  font-family: 'Cinzel', serif; font-size: .78rem; font-weight: 900;
+  color: var(--gold-bright);
+}
+
+.form-tag__label {
+  font-family: 'Cinzel', serif;
+  font-size: .7rem; font-weight: 600;
+  letter-spacing: .25em; text-transform: uppercase;
+  color: var(--gold-dim);
+}
+
+// ── Botón eliminar equipo ──────────────────────────────────
+.btn-remove {
+  position: absolute; top: .9rem; right: .9rem;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: transparent;
+  border: 1px solid rgba(240,230,200,.12);
+  color: rgba(240,230,200,.3);
+  font-size: .7rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .25s;
+  line-height: 1;
+
+  &:hover {
+    border-color: #c0392b;
+    color: #e74c3c;
+    background: rgba(231,76,60,.08);
+  }
+}
+
+// ── Botón añadir equipo ────────────────────────────────────
+.btn-add-team {
+  display: flex; align-items: center; justify-content: center; gap: .7rem;
+  width: 100%;
+  padding: .85rem;
+  background: transparent;
+  border: 1.5px dashed rgba(212,160,23,.25);
+  border-radius: 10px;
+  color: var(--gold-dim);
+  font-family: 'Cinzel', serif;
+  font-size: .78rem; letter-spacing: .2em; text-transform: uppercase;
+  cursor: pointer;
+  transition: all .3s;
+
+  &:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(212,160,23,.05);
+  }
+}
+
+.btn-add-team__icon {
+  font-size: 1.2rem; font-weight: 300;
+  line-height: 1;
+}
+
+// ── Acciones principales ───────────────────────────────────
+.form-actions {
+  display: flex; gap: .8rem;
+  flex-wrap: wrap; justify-content: center;
+  animation: fadeUp .5s .2s cubic-bezier(.2,.9,.3,1) both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Botones ────────────────────────────────────────────────
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .65rem 1.4rem;
+  border-radius: 5px;
+  font-family: 'Cinzel', serif;
+  font-size: .75rem; letter-spacing: .18em; text-transform: uppercase;
+  cursor: pointer; border: none;
+  transition: all .25s; white-space: nowrap;
+
+  &:disabled { opacity: .35; cursor: not-allowed; }
+}
+
+.btn-icon { font-size: .85rem; }
+
+.btn-gold {
+  background: linear-gradient(135deg, #a07010, var(--gold));
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(212,160,23,.25);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+    box-shadow: 0 6px 28px rgba(212,160,23,.4);
+    transform: translateY(-1px);
+  }
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(240,230,200,.18);
+  color: var(--cream-muted);
+  font-weight: 400;
+
+  &:hover:not(:disabled) {
+    border-color: rgba(240,230,200,.4);
+    color: var(--cream);
+  }
+}
+
+.btn-cta {
+  background: linear-gradient(135deg, #6b0f0f, var(--red-accent));
+  color: var(--cream);
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(139,26,26,.35);
+  animation: ctaPulse 2.5s ease-in-out infinite;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--red-accent), #b52020);
+    box-shadow: 0 6px 28px rgba(139,26,26,.55);
+    transform: translateY(-1px);
+    animation: none;
+  }
+}
+
+@keyframes ctaPulse {
+  0%,100% { box-shadow: 0 4px 20px rgba(139,26,26,.35); }
+  50%     { box-shadow: 0 4px 32px rgba(139,26,26,.6); }
+}
+
+// ── Equipos guardados ──────────────────────────────────────
+.saved-data {
+  background: var(--ink-card);
+  border: 1px solid rgba(212,160,23,.18);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-gold);
+  animation: fadeUp .5s cubic-bezier(.2,.9,.3,1) both;
+}
+
+.saved-data__header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.2rem;
+  padding-bottom: .9rem;
+  border-bottom: 1px solid rgba(212,160,23,.12);
+}
+
+.saved-data__header h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem; font-weight: 900;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: var(--gold-bright);
+  margin: 0;
+}
+
+.saved-badge {
+  font-family: 'Cinzel', serif;
+  font-size: .65rem; letter-spacing: .2em;
+  color: var(--gold-dim);
+  background: rgba(212,160,23,.1);
+  border: 1px solid rgba(212,160,23,.2);
+  border-radius: 20px;
+  padding: .25rem .75rem;
+  text-transform: uppercase;
+}
+
+.teams-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: .75rem;
+}
+
+.team-summary {
+  display: flex; align-items: center; gap: .85rem;
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(212,160,23,.1);
+  border-radius: 8px;
+  padding: .8rem 1rem;
+  transition: border-color .25s, transform .25s;
+
+  &:hover {
+    border-color: rgba(212,160,23,.28);
+    transform: translateY(-1px);
+  }
+
+  &[data-rank="1"] { border-color: rgba(245,200,66,.3); }
+  &[data-rank="2"] { border-color: rgba(192,192,192,.2); }
+  &[data-rank="3"] { border-color: rgba(205,127,50,.2); }
+}
+
+.team-summary__rank {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  font-family: 'Cinzel', serif; font-size: .78rem; font-weight: 900;
+  background: rgba(212,160,23,.1);
+  border: 1px solid rgba(212,160,23,.25);
+  color: var(--gold);
+}
+
+.team-summary__info {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: .15rem;
+
+  strong {
+    font-family: 'Cinzel', serif;
+    font-size: .85rem; font-weight: 600;
+    color: var(--cream);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+}
+
+.participants-count {
+  font-size: .7rem; color: var(--cream-muted); letter-spacing: .05em;
+}
+
+// ── Avatares participantes ─────────────────────────────────
+.team-summary__dots {
+  display: flex; gap: 3px; flex-shrink: 0;
+}
+
+.dot {
+  display: flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(212,160,23,.12);
+  border: 1px solid rgba(212,160,23,.25);
+  font-size: .6rem; font-weight: 700;
+  color: var(--gold);
+  font-family: 'Cinzel', serif;
+
+  &--more {
+    background: rgba(255,255,255,.05);
+    border-color: rgba(255,255,255,.1);
+    color: var(--cream-muted);
+    font-size: .55rem;
+  }
+}
+
+// ── Responsive ─────────────────────────────────────────────
+@media (min-width: 768px) {
+  .page-header { text-align: left; }
+  .header-badge { justify-content: flex-start; }
+  .header-divider { margin-left: 0; margin-right: auto; }
+  .form-actions { justify-content: flex-start; }
+}

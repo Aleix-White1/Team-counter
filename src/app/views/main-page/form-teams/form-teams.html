@@ -1,0 +1,124 @@
+<form [formGroup]="formTeam" (ngSubmit)="onSubmitTeam()" class="form-card" [class.is-saved]="saved">
+
+  <!-- Overlay de éxito -->
+  @if (saved) {
+    <div class="saved-overlay">
+      <div class="saved-checkmark">✦</div>
+      <span class="saved-label">Equipo guardado</span>
+    </div>
+  }
+
+  <!-- Nombre del equipo -->
+  <div class="form-section">
+    <div class="label-row">
+      <label for="teamName" class="form-label">Nombre del Equipo</label>
+      <span class="char-counter" [class.near-limit]="nameLength > 40" [class.at-limit]="nameLength >= 50">
+        {{ nameLength }}/50
+      </span>
+    </div>
+    <div class="input-wrapper" [class.input-error]="formTeam.get('name')?.touched && formTeam.get('name')?.invalid">
+      <input
+        id="teamName"
+        formControlName="name"
+        type="text"
+        placeholder="Ej: Los Apaches"
+        class="form-input"
+        autocomplete="off">
+      <div class="input-bar"></div>
+    </div>
+    @if (formTeam.get('name')?.touched && formTeam.get('name')?.invalid) {
+      <div class="error-message" [@fadeSlide]>
+        @if (formTeam.get('name')?.errors?.['required']) {
+          <span class="error-dot"></span> El nombre es obligatorio
+        }
+        @if (formTeam.get('name')?.errors?.['maxlength']) {
+          <span class="error-dot"></span> Máximo 50 caracteres
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Participantes -->
+  <div class="form-section">
+    <div class="label-row">
+      <span class="form-label">Participantes</span>
+      @if (participants.length > 0) {
+        <span class="participants-badge">{{ participants.length }}</span>
+      }
+    </div>
+
+    <div formArrayName="participants" class="participants-list">
+
+      <!-- Estado vacío -->
+      @if (participants.length === 0) {
+        <div class="empty-state">
+          <span class="empty-icon">◎</span>
+          <span class="empty-text">Añade al menos un participante</span>
+        </div>
+      }
+
+      @for (participant of participants.controls; track $index; let i = $index) {
+        <div class="participant-item">
+          <div class="participant-input-wrapper">
+            <span class="participant-index">{{ i + 1 }}</span>
+            <div class="input-wrapper" style="flex:1">
+              <input
+                [id]="'participant-' + i"
+                [formControlName]="i"
+                type="text"
+                [placeholder]="'Participante ' + (i + 1)"
+                class="form-input form-input--participant">
+              <div class="input-bar"></div>
+            </div>
+            @if (!finished) {
+              <button
+                type="button"
+                (click)="removeMemberTeam(i)"
+                class="btn-remove-participant"
+                title="Eliminar participante"
+                aria-label="Eliminar participante {{ i + 1 }}">
+                ✕
+              </button>
+            }
+          </div>
+          @if (participants.controls[i].touched && participants.controls[i].invalid) {
+            <div class="error-message error-message--inline">
+              <span class="error-dot"></span> Campo obligatorio
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    @if (!finished) {
+      <button
+        type="button"
+        (click)="addMemberTeam()"
+        class="btn-add-participant">
+        <span class="btn-add-participant__icon">+</span>
+        Añadir participante
+      </button>
+    }
+
+    @if (formTeam.get('participants')?.touched && formTeam.get('participants')?.errors?.['atLeastOne']) {
+      <div class="error-message">
+        <span class="error-dot"></span> Debe haber al menos 1 participante
+      </div>
+    }
+  </div>
+
+  <!-- Acciones -->
+  @if (!saved) {
+    <div class="form-actions">
+      <button
+        type="submit"
+        [disabled]="formTeam.invalid || finished"
+        class="btn btn-primary-gold">
+        <span class="btn-shimmer"></span>
+        <span class="btn-icon-left">✦</span>
+        Guardar Equipo
+      </button>
+    </div>
+  }
+
+</form>

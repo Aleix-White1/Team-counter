@@ -1,0 +1,97 @@
+<div class="teams-list">
+
+  <!-- Cabecera de sección -->
+  <div class="section-header">
+    <div class="section-title-group">
+      <span class="section-label">Equipos en Juego</span>
+      <span class="section-count">{{ teams.length }} equipos</span>
+    </div>
+    <!-- Líder actual -->
+    @if (leadingTeam) {
+      <div class="leader-badge">
+        <span class="leader-star">✦</span>
+        <span class="leader-name">{{ leadingTeam.name }}</span>
+        <span class="leader-pts">{{ leadingTeam.points }} pts</span>
+      </div>
+    }
+  </div>
+
+  <!-- Ranking bar (visual de puntos) -->
+  @if (teams.length > 1 && maxPoints > 0) {
+    <div class="ranking-bars">
+      @for (team of rankedTeams; track team.name; let i = $index) {
+        <div class="rank-row">
+          <span class="rank-pos">{{ i + 1 }}</span>
+          <span class="rank-name">{{ team.name }}</span>
+          <div class="rank-track">
+            <div
+              class="rank-fill"
+              [style.width.%]="(team.points / maxPoints) * 100"
+              [class.rank-fill--leader]="i === 0">
+            </div>
+          </div>
+          <span class="rank-pts">{{ team.points }}</span>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Cards de equipos -->
+  <div class="teams-container">
+    @for (team of teams; track team.name; let i = $index) {
+      <div
+        class="team-card"
+        [class.team-card--leader]="isLeader(i)"
+        [style.animation-delay]="i * 0.06 + 's'">
+
+        <!-- Número de posición -->
+        <div class="team-rank" [class.team-rank--gold]="isLeader(i)">
+          {{ getRank(team) }}
+        </div>
+
+        <!-- Info del equipo -->
+        <div class="team-body">
+          <div class="team-name">{{ team.name }}</div>
+          <div class="team-participants">
+            @for (p of team.participants.slice(0, 5); track $index) {
+              <span class="participant-chip">{{ p.charAt(0).toUpperCase() }}</span>
+            }
+            @if (team.participants.length > 5) {
+              <span class="participant-chip participant-chip--more">+{{ team.participants.length - 5 }}</span>
+            }
+            <span class="participants-names">{{ team.participants.slice(0, 3).join(', ') }}{{ team.participants.length > 3 ? '…' : '' }}</span>
+          </div>
+        </div>
+
+        <!-- Puntos y acciones -->
+        <div class="team-right">
+          <div class="points-display" [class.points-display--leader]="isLeader(i)">
+            <span class="points-value">{{ team.points ?? 0 }}</span>
+            <span class="points-label">pts</span>
+          </div>
+          <button
+            class="btn-edit"
+            type="button"
+            (click)="openEdit(i)"
+            [title]="'Editar puntos de ' + team.name">
+            <span class="btn-edit__icon">✎</span>
+            <span class="btn-edit__label">Editar</span>
+          </button>
+        </div>
+
+        <!-- Acento líder -->
+        @if (isLeader(i)) {
+          <div class="leader-accent" aria-hidden="true"></div>
+        }
+      </div>
+    }
+  </div>
+
+  <app-team-edit-modal
+    [visible]="modalVisible"
+    [teamIndex]="editingIndex"
+    [team]="editingIndex !== null ? teams[editingIndex] : null"
+    (apply)="onApply($event)"
+    (closed)="onClose()"
+  ></app-team-edit-modal>
+</div>

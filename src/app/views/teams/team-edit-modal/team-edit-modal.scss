@@ -1,0 +1,309 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Lato:wght@300;400;700&display=swap');
+
+:host {
+  --gold:        #d4a017;
+  --gold-bright: #f5c842;
+  --gold-dim:    #7a5c0a;
+  --gold-muted:  rgba(212,160,23,0.12);
+  --ink:         #0d0d0d;
+  --ink-card:    #131210;
+  --cream:       #f0e6c8;
+  --cream-muted: rgba(240,230,200,0.45);
+  --red:         #8b1a1a;
+  --red-muted:   rgba(139,26,26,0.14);
+  --green:       #1a5c2e;
+  --green-muted: rgba(26,92,46,0.15);
+}
+
+// ── Backdrop ───────────────────────────────────────────────
+.modal-backdrop {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(3px);
+  z-index: 1000;
+  animation: backdropIn 0.25s ease both;
+  padding: 1rem;
+}
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+// ── Modal ──────────────────────────────────────────────────
+.modal {
+  position: relative;
+  background: var(--ink-card);
+  border: 1px solid rgba(212,160,23,0.2);
+  border-radius: 14px;
+  width: 100%; max-width: 420px;
+  padding: 1.6rem;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,160,23,0.06) inset;
+  animation: modalIn 0.35s cubic-bezier(.2,.9,.3,1) both;
+  font-family: 'Lato', sans-serif;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+// ── Header ─────────────────────────────────────────────────
+.modal-header {
+  display: flex; flex-direction: column; gap: 0.55rem;
+  margin-bottom: 1.4rem;
+  padding-right: 2rem;
+}
+.modal-eyebrow {
+  display: flex; align-items: center; gap: 6px;
+}
+.eyebrow-hole {
+  display: block; width: 12px; height: 8px;
+  background: rgba(245,200,66,.07);
+  border: 1px solid rgba(245,200,66,.2);
+  border-radius: 2px;
+}
+.eyebrow-text {
+  font-family: 'Cinzel', serif; font-size: .62rem;
+  letter-spacing: .3em; color: var(--gold-dim);
+  text-transform: uppercase;
+}
+.modal-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem; font-weight: 900;
+  color: var(--gold-bright);
+  letter-spacing: .06em; margin: 0;
+  text-shadow: 0 0 30px rgba(245,200,66,.2);
+}
+.modal-participants {
+  display: flex; gap: 4px; flex-wrap: wrap;
+}
+.p-chip {
+  display: flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(212,160,23,.1);
+  border: 1px solid rgba(212,160,23,.22);
+  font-family: 'Cinzel', serif; font-size: .55rem; font-weight: 900;
+  color: var(--gold);
+  &--more {
+    background: rgba(255,255,255,.04);
+    border-color: rgba(255,255,255,.1);
+    color: var(--cream-muted); font-size: .5rem;
+  }
+}
+.btn-close {
+  position: absolute; top: 1.2rem; right: 1.2rem;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: transparent;
+  border: 1px solid rgba(240,230,200,.1);
+  color: rgba(240,230,200,.28);
+  font-size: .65rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+  &:hover {
+    border-color: rgba(191,59,43,.4);
+    color: #e74c3c;
+    background: rgba(231,76,60,.07);
+  }
+}
+
+// ── Score display ──────────────────────────────────────────
+.score-display {
+  display: flex; align-items: center; gap: .75rem;
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(212,160,23,.1);
+  border-radius: 10px; padding: .9rem 1rem;
+  margin-bottom: 1.3rem;
+}
+.score-block {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: .25rem;
+}
+.score-label {
+  font-family: 'Cinzel', serif; font-size: .58rem;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold-dim);
+}
+.score-value {
+  font-family: 'Cinzel', serif; font-size: 1.6rem; font-weight: 900;
+  color: rgba(240,230,200,.55);
+  transition: color .3s, transform .3s;
+}
+.score-block--result .score-value { color: rgba(240,230,200,.9); }
+.result--pos .score-value {
+  color: #4caf7d;
+  text-shadow: 0 0 16px rgba(76,175,125,.25);
+}
+.result--neg .score-value {
+  color: #e05252;
+  text-shadow: 0 0 16px rgba(224,82,82,.25);
+}
+
+.score-arrow {
+  font-family: 'Cinzel', serif; font-size: .95rem; font-weight: 900;
+  color: rgba(240,230,200,.2);
+  min-width: 36px; text-align: center;
+  transition: color .25s, transform .25s;
+  &--pos { color: #4caf7d; transform: scale(1.1); }
+  &--neg { color: #e05252; transform: scale(1.1); }
+}
+
+// ── Quick buttons ──────────────────────────────────────────
+.quick-section {
+  display: flex; flex-direction: column; gap: .5rem;
+  margin-bottom: 1.1rem;
+}
+.quick-label {
+  font-family: 'Cinzel', serif; font-size: .6rem;
+  letter-spacing: .25em; text-transform: uppercase;
+  color: var(--gold-dim);
+}
+.quick-buttons {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem;
+}
+.quick-btn {
+  padding: .5rem .4rem;
+  background: rgba(255,255,255,.025);
+  border: 1px solid rgba(240,230,200,.07);
+  border-radius: 7px;
+  font-family: 'Cinzel', serif; font-size: .75rem; font-weight: 900;
+  color: rgba(240,230,200,.4);
+  cursor: pointer; transition: all .18s; letter-spacing: .03em;
+
+  &--pos:hover, &--pos.quick-btn--active {
+    background: var(--green-muted);
+    border-color: rgba(76,175,125,.4);
+    color: #4caf7d;
+  }
+  &--neg:hover, &--neg.quick-btn--active {
+    background: var(--red-muted);
+    border-color: rgba(224,82,82,.4);
+    color: #e05252;
+  }
+  &--active {
+    transform: scale(0.96);
+    box-shadow: 0 0 12px rgba(212,160,23,.08);
+  }
+}
+
+// ── Input manual ───────────────────────────────────────────
+.input-section {
+  display: flex; flex-direction: column; gap: .5rem;
+  margin-bottom: 1.4rem;
+}
+.input-row {
+  display: flex; align-items: stretch; gap: .4rem;
+}
+.stepper-btn {
+  width: 38px; flex-shrink: 0;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(240,230,200,.08);
+  border-radius: 7px;
+  font-size: 1.1rem; font-weight: 300;
+  cursor: pointer; transition: all .18s;
+  display: flex; align-items: center; justify-content: center;
+
+  &--plus { color: rgba(76,175,125,.6);
+    &:hover { background: var(--green-muted); border-color: rgba(76,175,125,.35); color: #4caf7d; } }
+  &--minus { color: rgba(224,82,82,.6);
+    &:hover { background: var(--red-muted); border-color: rgba(224,82,82,.35); color: #e05252; } }
+}
+.input-wrapper {
+  position: relative; flex: 1;
+  display: flex; align-items: center;
+  background: rgba(255,255,255,.025);
+  border: 1px solid rgba(240,230,200,.07);
+  border-bottom-color: rgba(212,160,23,.2);
+  border-radius: 8px; border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+  overflow: hidden; transition: border-color .2s;
+
+  &:focus-within {
+    border-color: rgba(212,160,23,.35);
+    border-bottom-color: rgba(212,160,23,.35);
+    .input-bar { transform: scaleX(1); opacity: 1; }
+  }
+  &.input-pos {
+    border-color: rgba(76,175,125,.3);
+    .input-bar { background: linear-gradient(90deg, transparent, #4caf7d, transparent); transform: scaleX(1); opacity: 1; }
+  }
+  &.input-neg {
+    border-color: rgba(224,82,82,.3);
+    .input-bar { background: linear-gradient(90deg, transparent, #e05252, transparent); transform: scaleX(1); opacity: 1; }
+  }
+}
+.input-prefix {
+  font-family: 'Cinzel', serif; font-size: .85rem; font-weight: 900;
+  color: var(--gold-dim); padding: 0 .5rem 0 .8rem; flex-shrink: 0;
+}
+.modal-input {
+  flex: 1; background: transparent;
+  border: none; outline: none;
+  color: var(--cream);
+  font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 900;
+  padding: .7rem .7rem .7rem 0;
+  letter-spacing: .05em;
+  &::placeholder { color: rgba(240,230,200,.15); font-weight: 400; }
+  &::-webkit-inner-spin-button, &::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+}
+.input-bar {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--gold-bright), var(--gold), transparent);
+  transform: scaleX(0); opacity: 0; transform-origin: center;
+  transition: transform .3s cubic-bezier(.2,.9,.3,1), opacity .3s;
+}
+
+// ── Acciones ───────────────────────────────────────────────
+.modal-actions {
+  display: flex; gap: .7rem; justify-content: flex-end;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: .45rem;
+  padding: .65rem 1.2rem;
+  border-radius: 6px;
+  font-family: 'Cinzel', serif;
+  font-size: .7rem; letter-spacing: .18em; text-transform: uppercase;
+  cursor: pointer; border: none; transition: all .22s; white-space: nowrap;
+  &:disabled { opacity: .3; cursor: not-allowed; pointer-events: none; }
+}
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(240,230,200,.12);
+  color: rgba(240,230,200,.4);
+  &:hover { border-color: rgba(240,230,200,.3); color: var(--cream-muted); }
+}
+.btn-apply {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #8a6010, var(--gold));
+  color: var(--ink); font-weight: 700;
+  box-shadow: 0 4px 18px rgba(212,160,23,.2);
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+    box-shadow: 0 6px 26px rgba(212,160,23,.4);
+    transform: translateY(-1px);
+    .btn-shimmer { animation: shimmer .6s ease; }
+  }
+  &:active:not(:disabled) { transform: translateY(0); }
+
+  &--pos {
+    background: linear-gradient(135deg, #1a5c2e, #2e8b50);
+    box-shadow: 0 4px 18px rgba(26,92,46,.3);
+    color: #d4f5e2;
+    &:hover:not(:disabled) { background: linear-gradient(135deg, #2e8b50, #3dab64); box-shadow: 0 6px 26px rgba(26,92,46,.5); }
+  }
+  &--neg {
+    background: linear-gradient(135deg, #6b0f0f, #8b1a1a);
+    box-shadow: 0 4px 18px rgba(139,26,26,.3);
+    color: #fdd;
+    &:hover:not(:disabled) { background: linear-gradient(135deg, #8b1a1a, #b52020); box-shadow: 0 6px 26px rgba(139,26,26,.5); }
+  }
+}
+.apply-icon { font-size: .8rem; }
+.btn-shimmer {
+  position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+  transform: skewX(-15deg);
+}
+@keyframes shimmer {
+  from { left: -100%; }
+  to   { left: 200%; }
+}
